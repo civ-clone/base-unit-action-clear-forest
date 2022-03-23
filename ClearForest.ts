@@ -20,6 +20,7 @@ import Plains from '@civ-clone/base-terrain-plains/Plains';
 import TerrainFeature from '@civ-clone/core-terrain-feature/TerrainFeature';
 import Tile from '@civ-clone/core-world/Tile';
 import Unit from '@civ-clone/core-unit/Unit';
+import ClearingForest from './Rules/ClearingForest';
 
 // TODO: This is specific to the original Civilization and might need to be labelled as `-civ1` as other games have
 //  forests as a feature
@@ -40,27 +41,29 @@ export class ClearForest extends DelayedAction {
   }
 
   perform(): void {
-    const [
-      moveCost,
-    ]: number[] = (this.ruleRegistry() as IMovementCostRegistry)
+    const [moveCost]: number[] = (this.ruleRegistry() as IMovementCostRegistry)
       .process(MovementCost, this.unit(), this)
       .sort((a: number, b: number): number => b - a);
 
-    super.perform(moveCost, (): void => {
-      const terrain = new Plains(),
-        features = this.#terrainFeatureRegistry.getByTerrain(
-          this.from().terrain()
+    super.perform(
+      moveCost,
+      (): void => {
+        const terrain = new Plains(),
+          features = this.#terrainFeatureRegistry.getByTerrain(
+            this.from().terrain()
+          );
+
+        this.#terrainFeatureRegistry.register(
+          ...features.map(
+            (feature: TerrainFeature): TerrainFeature => feature.clone(terrain)
+          )
         );
+        this.#terrainFeatureRegistry.unregister(...features);
 
-      this.#terrainFeatureRegistry.register(
-        ...features.map(
-          (feature: TerrainFeature): TerrainFeature => feature.clone(terrain)
-        )
-      );
-      this.#terrainFeatureRegistry.unregister(...features);
-
-      this.from().setTerrain(terrain);
-    });
+        this.from().setTerrain(terrain);
+      },
+      ClearingForest
+    );
 
     (this.ruleRegistry() as IMovedRegistry).process(Moved, this.unit(), this);
   }

@@ -1,6 +1,6 @@
 {
   "name": "@civ-clone/base-unit-action-clear-forest",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": "git@github.com:civ-clone/base-unit-action-clear-forest.git",
   "keywords": [
     "typescript",

@@ -1,8 +1,3 @@
-import { Moved, IMovedRegistry } from '@civ-clone/core-unit/Rules/Moved';
-import {
-  MovementCost,
-  IMovementCostRegistry,
-} from '@civ-clone/core-unit/Rules/MovementCost';
 import {
   RuleRegistry,
   instance as ruleRegistryInstance,
@@ -15,12 +10,14 @@ import {
   Turn,
   instance as turnInstance,
 } from '@civ-clone/core-turn-based-game/Turn';
+import ClearingForest from './Rules/ClearingForest';
 import DelayedAction from '@civ-clone/core-unit/DelayedAction';
+import Moved from '@civ-clone/core-unit/Rules/Moved';
+import MovementCost from '@civ-clone/core-unit/Rules/MovementCost';
 import Plains from '@civ-clone/base-terrain-plains/Plains';
 import TerrainFeature from '@civ-clone/core-terrain-feature/TerrainFeature';
 import Tile from '@civ-clone/core-world/Tile';
 import Unit from '@civ-clone/core-unit/Unit';
-import ClearingForest from './Rules/ClearingForest';
 
 // TODO: This is specific to the original Civilization and might need to be labelled as `-civ1` as other games have
 //  forests as a feature
@@ -41,7 +38,7 @@ export class ClearForest extends DelayedAction {
   }
 
   perform(): void {
-    const [moveCost]: number[] = (this.ruleRegistry() as IMovementCostRegistry)
+    const [moveCost]: number[] = this.ruleRegistry()
       .process(MovementCost, this.unit(), this)
       .sort((a: number, b: number): number => b - a);
 
@@ -65,7 +62,7 @@ export class ClearForest extends DelayedAction {
       ClearingForest
     );
 
-    (this.ruleRegistry() as IMovedRegistry).process(Moved, this.unit(), this);
+    this.ruleRegistry().process(Moved, this.unit(), this);
   }
 }
 

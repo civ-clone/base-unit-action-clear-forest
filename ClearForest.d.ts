@@ -5,7 +5,7 @@ import DelayedAction from '@civ-clone/core-unit/DelayedAction';
 import Tile from '@civ-clone/core-world/Tile';
 import Unit from '@civ-clone/core-unit/Unit';
 export declare class ClearForest extends DelayedAction {
-  #private;
+  private _terrainFeatureRegistry;
   constructor(
     from: Tile,
     to: Tile,

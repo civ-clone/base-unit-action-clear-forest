@@ -22,7 +22,7 @@ import Unit from '@civ-clone/core-unit/Unit';
 // TODO: This is specific to the original Civilization and might need to be labelled as `-civ1` as other games have
 //  forests as a feature
 export class ClearForest extends DelayedAction {
-  #terrainFeatureRegistry: TerrainFeatureRegistry;
+  private _terrainFeatureRegistry: TerrainFeatureRegistry;
 
   constructor(
     from: Tile,
@@ -34,7 +34,7 @@ export class ClearForest extends DelayedAction {
   ) {
     super(from, to, unit, ruleRegistry, turn);
 
-    this.#terrainFeatureRegistry = terrainFeatureRegistry;
+    this._terrainFeatureRegistry = terrainFeatureRegistry;
   }
 
   perform(): void {
@@ -46,16 +46,16 @@ export class ClearForest extends DelayedAction {
       moveCost,
       (): void => {
         const terrain = new Plains(),
-          features = this.#terrainFeatureRegistry.getByTerrain(
+          features = this._terrainFeatureRegistry.getByTerrain(
             this.from().terrain()
           );
 
-        this.#terrainFeatureRegistry.register(
+        this._terrainFeatureRegistry.register(
           ...features.map(
             (feature: TerrainFeature): TerrainFeature => feature.clone(terrain)
           )
         );
-        this.#terrainFeatureRegistry.unregister(...features);
+        this._terrainFeatureRegistry.unregister(...features);
 
         this.from().setTerrain(terrain);
       },

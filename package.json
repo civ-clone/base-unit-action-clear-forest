@@ -25,7 +25,7 @@
     "@civ-clone/core-rule": "^0.1.0",
     "@civ-clone/core-terrain-feature": "^0.1.0",
     "@civ-clone/core-turn-based-game": "^0.1.0",
-    "@civ-clone/core-unit": "^0.1.0",
+    "@civ-clone/core-unit": "^0.1.20",
     "@civ-clone/core-world": "^0.1.0"
   }
 }

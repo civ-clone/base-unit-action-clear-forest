@@ -4,6 +4,7 @@ import { Turn } from '@civ-clone/core-turn-based-game/Turn';
 import DelayedAction from '@civ-clone/core-unit/DelayedAction';
 import Tile from '@civ-clone/core-world/Tile';
 import Unit from '@civ-clone/core-unit/Unit';
+export declare const COMPLETE = 'base-unit-action-clear-forest:complete';
 export declare class ClearForest extends DelayedAction {
   private _terrainFeatureRegistry;
   constructor(

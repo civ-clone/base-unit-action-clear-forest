@@ -44,13 +44,16 @@ class ClearForest extends DelayedAction_1.default {
      * fields, and does not change `keyof this`.
      */
     static complete(action) {
-        const terrain = new Plains_1.default(), features = action._terrainFeatureRegistry.getByTerrain(action.from().terrain());
+        const terrain = new ClearForest.result(), features = action._terrainFeatureRegistry.getByTerrain(action.from().terrain());
         action._terrainFeatureRegistry.register(...features.map((feature) => feature.clone(terrain)));
         action._terrainFeatureRegistry.unregister(...features);
         action.from().setTerrain(terrain);
     }
 }
 exports.ClearForest = ClearForest;
+// The terrain finishing leaves behind, a static for the same reason `complete` is: the UI is sent it to show what the
+//  action will do, so it is read from here rather than worked out again elsewhere.
+ClearForest.result = Plains_1.default;
 // Registered here rather than passed to `perform` as a closure: a closure
 // cannot be written to a file, which is why a unit part-way through this could
 // not be saved. The behaviour itself stays on the action, in `complete()`.

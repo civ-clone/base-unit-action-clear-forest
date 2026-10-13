@@ -18,7 +18,7 @@ import Plains from '@civ-clone/base-terrain-plains/Plains';
 import Tile from '@civ-clone/core-world/Tile';
 import Unit from '@civ-clone/core-unit/Unit';
 import registerDelayedAction from '@civ-clone/core-unit/registerDelayedAction';
-import TerrainFeature from '@civ-clone/core-terrain-feature/TerrainFeature';
+import Horse from '@civ-clone/base-terrain-feature-horse/Horse';
 
 export const COMPLETE = 'base-unit-action-clear-forest:complete';
 
@@ -78,11 +78,10 @@ export class ClearForest extends DelayedAction {
         action.from().terrain()
       );
 
-    action._terrainFeatureRegistry.register(
-      ...features.map(
-        (feature: TerrainFeature): TerrainFeature => feature.clone(terrain)
-      )
-    );
+    // A special resource stays with the square, as in Civ1: a Forest's Game becomes Horses on the Plains.
+    if (features.length > 0) {
+      action._terrainFeatureRegistry.register(new Horse(terrain));
+    }
 
     action._terrainFeatureRegistry.unregister(...features);
 

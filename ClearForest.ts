@@ -18,7 +18,6 @@ import Plains from '@civ-clone/base-terrain-plains/Plains';
 import Tile from '@civ-clone/core-world/Tile';
 import Unit from '@civ-clone/core-unit/Unit';
 import registerDelayedAction from '@civ-clone/core-unit/registerDelayedAction';
-import Horse from '@civ-clone/base-terrain-feature-horse/Horse';
 
 export const COMPLETE = 'base-unit-action-clear-forest:complete';
 
@@ -29,8 +28,10 @@ export class ClearForest extends DelayedAction {
   //  because a public instance member would make the class unassignable to `Action` (see `complete`).
   static readonly result = Plains;
 
-  private _terrainFeatureRegistry: TerrainFeatureRegistry;
-
+  /**
+   * `terrainFeatureRegistry` is no longer used: the rule set's `TerrainChanged`
+   * rules move the square's features. It stays so the signature doesn't change.
+   */
   constructor(
     from: Tile,
     to: Tile,
@@ -40,8 +41,6 @@ export class ClearForest extends DelayedAction {
     turn: Turn = turnInstance
   ) {
     super(from, to, unit, ruleRegistry, turn);
-
-    this._terrainFeatureRegistry = terrainFeatureRegistry;
   }
 
   perform(): void {
@@ -55,8 +54,8 @@ export class ClearForest extends DelayedAction {
   }
 
   /**
-   * What finishing does, against the registries this action was constructed
-   * with.
+   * What finishing does: the square takes `result`, and its tile's rules
+   * (`TerrainChanged`) decide what follows it onto the new terrain.
    *
    * This was the closure passed to `perform`, bound to `this`. Converting it
    * to a `PendingEffect` handler first moved it to module scope, where `this`
@@ -69,23 +68,12 @@ export class ClearForest extends DelayedAction {
    * Static, because an instance method would not compile: a new public member
    * makes this class unassignable to `Action` (`DataObject._keys:
    * (keyof this)[]`), and it is passed as one to `MovementCost` and `Moved`.
-   * A static method of the class may still read its instances' private
-   * fields, and does not change `keyof this`.
+   * A static method does not change `keyof this`.
    */
   static complete(action: ClearForest): void {
-    const terrain = new ClearForest.result(),
-      features = action._terrainFeatureRegistry.getByTerrain(
-        action.from().terrain()
-      );
-
-    // A special resource stays with the square, as in Civ1: a Forest's Game becomes Horses on the Plains.
-    if (features.length > 0) {
-      action._terrainFeatureRegistry.register(new Horse(terrain));
-    }
-
-    action._terrainFeatureRegistry.unregister(...features);
-
-    action.from().setTerrain(terrain);
+    // What follows the square onto its new terrain (its features, for one) is the rule set's `TerrainChanged` rules'
+    //  to decide.
+    action.from().setTerrain(new ClearForest.result());
   }
 }
 

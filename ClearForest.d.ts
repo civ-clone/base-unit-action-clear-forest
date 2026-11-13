@@ -8,7 +8,10 @@ import Unit from '@civ-clone/core-unit/Unit';
 export declare const COMPLETE = 'base-unit-action-clear-forest:complete';
 export declare class ClearForest extends DelayedAction {
   static readonly result: typeof Plains;
-  private _terrainFeatureRegistry;
+  /**
+   * `terrainFeatureRegistry` is no longer used: the rule set's `TerrainChanged`
+   * rules move the square's features. It stays so the signature doesn't change.
+   */
   constructor(
     from: Tile,
     to: Tile,
@@ -19,8 +22,8 @@ export declare class ClearForest extends DelayedAction {
   );
   perform(): void;
   /**
-   * What finishing does, against the registries this action was constructed
-   * with.
+   * What finishing does: the square takes `result`, and its tile's rules
+   * (`TerrainChanged`) decide what follows it onto the new terrain.
    *
    * This was the closure passed to `perform`, bound to `this`. Converting it
    * to a `PendingEffect` handler first moved it to module scope, where `this`
@@ -33,8 +36,7 @@ export declare class ClearForest extends DelayedAction {
    * Static, because an instance method would not compile: a new public member
    * makes this class unassignable to `Action` (`DataObject._keys:
    * (keyof this)[]`), and it is passed as one to `MovementCost` and `Moved`.
-   * A static method of the class may still read its instances' private
-   * fields, and does not change `keyof this`.
+   * A static method does not change `keyof this`.
    */
   static complete(action: ClearForest): void;
 }

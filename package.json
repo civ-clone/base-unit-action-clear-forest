@@ -17,7 +17,7 @@
     "ts:compile": "tsc --build tsconfig.json"
   },
   "devDependencies": {
-    "@civ-clone/base-terrain-feature": "github:civ-clone/base-terrain-feature#feat/terrain-changed",
+    "@civ-clone/base-terrain-feature": "^0.1.0",
     "@civ-clone/core-terrain": "^0.1.4",
     "@types/chai": "^4.0.0",
     "@types/mocha": "^10.0.0",
@@ -34,6 +34,6 @@
     "@civ-clone/core-terrain-feature": "^0.1.0",
     "@civ-clone/core-turn-based-game": "^0.1.0",
     "@civ-clone/core-unit": "^0.1.23",
-    "@civ-clone/core-world": "github:civ-clone/core-world#feat/terrain-changed"
+    "@civ-clone/core-world": "^0.1.24"
   }
 }
